@@ -150,17 +150,18 @@ public class Recommendations {
 				mean = mean / 18;
 				meanVar[usrID] = mean;
 			}//end of while
-
+//Task: we need to hav only 5 users get written instead of all the users
 			int i = 0;
+			int [] intermediateCorr = new int[71568];
 			File f = new File("Correlation.txt");
 			PrintWriter pw = new PrintWriter(f);	
-			sc1 = new Scanner(profiles);
-			
-			while(sc1.hasNext()){
+				sc1 = new Scanner(profiles);
+			//This while runs for all the rows.
+				while(sc1.hasNext()){
 				sc2 = new Scanner(profiles);
 				int j = 0;
 				String values[] = sc1.next().split(",");
-				while(sc2.hasNext()) {
+				while(sc2.hasNext()) {	
 					double numerator = 0;
 					double denominator = 0;       
 					double leftDeno = 0;
@@ -168,7 +169,8 @@ public class Recommendations {
 					String values1[] = sc2.next().split(",");
 					if( i == j) {
 						float coorelation = 1;
-						pw.print(coorelation+" ");
+						//pw.print(coorelation+" ");
+						intermediateCorr[j] = coorelation;
 						j++;
 						continue;
 					}
@@ -189,18 +191,29 @@ public class Recommendations {
 					float coorelation = 0;
 					if(denominator != 0)
 						coorelation = (float) (numerator / denominator);
-					pw.print(coorelation+" ");
+					//pw.print(coorelation+" "); instead of printing we should store it in an array
+					intermediateCorr[j] = coorelation;
 					j++;
 					continue;
 				}//end of while sc2
 				i++;
-				pw.println();
+				//pw.println();
 			}
+			
+			//writing only top five values in the file.
+			Arrays.sort(intermediateCorr);
+			int temp = intermediateCorr.length - 1;
+			int tempCounter = 0;
+			 while(tempCounter < 5){
+				pw.print(intermediateCorr[temp--]+" ");
+				tempCounter++;
+			}
+			pw.println();
 			pw.flush();
 			pw.close();
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();
-		}
+		
 
 	}
 
@@ -225,7 +238,7 @@ public class Recommendations {
 		// File fp = new
 		// File("/home/atul/ParallelProject/ml-10M100K/splits/ra.train");
 		r.loadData();
-		//r.CalculatePearsonsCorr();
+		r.CalculatePearsonsCorr();
 		// System.out.println(r.calculateCosine(1,2));
 		// System.out.println(r.getNeighbours(1)[3]);
 	}

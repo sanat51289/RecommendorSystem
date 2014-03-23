@@ -1,4 +1,4 @@
 RecommendorSystem
 =================
 
-Recommendation System as Masters Project
+The source code attached under this project parses the Movie datasets of Movie Lens Research group.      
